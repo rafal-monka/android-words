@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="false">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2sp"
+            android:text="Phrase:">
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/words"
+                android:layout_width="0dp"
+                android:layout_weight="0.8"
+                android:layout_height="wrap_content"
+                android:layout_margin="2sp"
+                android:text=""
+                android:background="#ffcccc"
+                android:layout_marginTop="40dp" />
+
+            <ImageButton
+                android:id="@+id/listen1"
+                android:layout_width="25sp"
+                android:layout_height="25sp"
+                android:layout_margin="2sp"
+                android:layout_gravity="top|right"
+                android:background="@null"
+                android:src="@drawable/microphone" />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/translate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:onClick="onTranslateClick"
+            android:src="@drawable/search" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2sp"
+            android:text="Translation:">
+        </TextView>
+
+        <EditText
+            android:id="@+id/translation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp"
+            android:text=""
+            android:textSize="10sp"
+            android:background="#cceecc" />
+
+        <TextView
+            android:id="@+id/examples"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp"
+            android:text=""
+            android:background="#aaeeaa" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2sp"
+            android:text="Sentence:">
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/sentence"
+                android:layout_width="0dp"
+                android:layout_weight="0.8"
+                android:layout_height="wrap_content"
+                android:layout_margin="2sp"
+                android:text=""
+                android:background="#ccccee" />
+
+            <ImageButton
+                android:id="@+id/listen2"
+                android:layout_width="25sp"
+                android:layout_height="25sp"
+                android:layout_margin="2sp"
+                android:layout_gravity="top|right"
+                android:background="@null"
+                android:src="@drawable/microphone" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:src="@drawable/save" />
+
+        <TextView
+            android:id="@+id/apiurltv"
+            android:textSize="8sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp"
+            android:text="" />
+    </LinearLayout>
+
+</ScrollView>

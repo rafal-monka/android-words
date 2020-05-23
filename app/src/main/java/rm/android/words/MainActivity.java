@@ -1,19 +1,14 @@
 package rm.android.words;
 
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.util.Log;
-import android.webkit.WebView;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String logtag = "WORDS";
@@ -32,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new Tab1Fragment(), "Phrase");
         adapter.addFragment(new Tab2Fragment(), "Dict");
         adapter.addFragment(new Tab3Fragment(), "Browse");
+        adapter.addFragment(new Tab4Fragment(), "*BuyList");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 

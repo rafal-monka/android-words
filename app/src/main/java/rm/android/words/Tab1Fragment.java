@@ -3,7 +3,6 @@ package rm.android.words;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Log;
@@ -41,6 +40,7 @@ public class Tab1Fragment extends Fragment {
     private EditText translation;
     private TextView examples;
     private TextView hws;
+    private String speechPart;
     private TextView statusBar;
     private List<String> audioUrlArr = new ArrayList<String>();
     ImageButton speakButton;
@@ -96,7 +96,6 @@ public class Tab1Fragment extends Fragment {
         translation = v.findViewById(R.id.translation);
         hws = v.findViewById(R.id.hws);
         examples = v.findViewById(R.id.examples);
-
         statusBar = v.findViewById(R.id.statusBar);
 
         TextView apiurltv = v.findViewById(R.id.apiurltv);
@@ -163,6 +162,7 @@ public class Tab1Fragment extends Fragment {
             translation.setText("Searching...");
             examples.setText("");
             hws.setText("");
+            speechPart = "";
             audioUrlArr.clear();
             speakButton.setVisibility(View.INVISIBLE);
             HttpClient.get( API_URL+"/translate/?text="+text, null,
@@ -177,6 +177,7 @@ public class Tab1Fragment extends Fragment {
                                 String meaningStr = "";
                                 String exampleStr = "";
                                 String audioUrlStr = "";
+                                String partOfSpeechStr = "";
 
                                 if (false) {
                                     meaningStr = response.getJSONArray("message").toString();
@@ -192,22 +193,27 @@ public class Tab1Fragment extends Fragment {
 
                                         //hws
                                         JSONArray hwArr = arr.getJSONObject(i).getJSONArray("hws");
-                                        for (int h = 0; h < hwArr.length(); h++) {
-                                            hwsStr += hwArr.getString(h) + ", ";
+                                        for (int j = 0; j < hwArr.length(); j++) {
+                                            hwsStr += hwArr.getString(j) + ", ";
                                         }
 
                                         //audios
                                         JSONArray audiourls = arr.getJSONObject(i).getJSONArray("audiourls");
-                                        for (int u = 0; u < audiourls.length(); u++) {
-                                            audioUrlStr += audiourls.getString(u) + ", ";
-                                            audioUrlArr.add(audiourls.getString(u));
+                                        for (int j = 0; j < audiourls.length(); j++) {
+                                            audioUrlStr += audiourls.getString(j) + ", ";
+                                            audioUrlArr.add(audiourls.getString(j));
                                         }
 
                                         //examples
                                         JSONArray examplesArr = arr.getJSONObject(i).getJSONArray("examples");
-                                        for (int k = 0; k < examplesArr.length(); k++) {
-                                            exampleStr += "* "+examplesArr.getString(k) + System.lineSeparator();
+                                        for (int j = 0; j < examplesArr.length(); j++) {
+                                            exampleStr += "* "+examplesArr.getString(j) + System.lineSeparator();
                                         }
+
+                                        //partOfSpeech
+                                        String part = arr.getJSONObject(i).getString("part");
+                                        Log.d(logtag, "part="+part);
+                                        if (partOfSpeechStr.indexOf(part)==-1) partOfSpeechStr += part + ", ";
                                     }
                                     if (!audioUrlArr.isEmpty()) {
                                         speakButton.setVisibility(View.VISIBLE);
@@ -218,6 +224,7 @@ public class Tab1Fragment extends Fragment {
                                 translation.setText(meaningStr.substring(0,meaningStr.length()-2));
                                 examples.setText(exampleStr);
                                 sentence.setText("");
+                                speechPart = partOfSpeechStr.substring(0,partOfSpeechStr.length()-2);
                                 words.clearFocus();
                             } catch (Exception e) {
                                 Log.e(logtag, e.toString());
@@ -230,6 +237,7 @@ public class Tab1Fragment extends Fragment {
                             sound.playSound(appContext, R.raw.fail);
                             translation.setText("");
                             hws.setText("");
+                            speechPart = "";
                             speakButton.setVisibility(View.INVISIBLE);
                             examples.setText("");
                             Toast.makeText(
@@ -245,6 +253,7 @@ public class Tab1Fragment extends Fragment {
                             sound.playSound(appContext, R.raw.fail);
                             translation.setText("");
                             hws.setText("");
+                            speechPart = "";
                             speakButton.setVisibility(View.INVISIBLE);
                             examples.setText("");
                             Toast.makeText(
@@ -267,7 +276,8 @@ public class Tab1Fragment extends Fragment {
         Log.d(logtag, "saveWord..."+API_URL);
         String _phrase = words.getText().toString();
         String _hws = hws.getText().toString();
-        String _speechpart = "__SPEECHPART__";
+        String _speechpart = speechPart;
+        Log.d(logtag, "speechPart="+speechPart);
         String _translation = translation.getText().toString();
         String _examples = examples.getText().toString();
         Log.d(logtag, "1["+_phrase+"]["+_translation+"]");

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Words</string>
+    <string name="channel_id">channel_id_1</string>
 </resources>

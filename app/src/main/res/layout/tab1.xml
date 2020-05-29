@@ -13,13 +13,6 @@
         android:focusable="true"
         android:focusableInTouchMode="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="2sp"
-            android:text="Phrase:">
-        </TextView>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,6 +25,7 @@
                 android:layout_weight="0.8"
                 android:layout_height="wrap_content"
                 android:layout_margin="2sp"
+                android:padding="2sp"
                 android:text=""
                 android:background="#ffcccc"
                 android:layout_marginTop="40dp" />
@@ -69,13 +63,12 @@
                 android:textColor="#000000">
             </TextView>
             <ImageButton
-                android:id="@+id/speak"
+                android:id="@+id/pronounceButton"
                 android:layout_width="25sp"
                 android:layout_height="25sp"
                 android:layout_margin="2sp"
                 android:layout_gravity="top|left"
                 android:background="@null"
-
                 android:visibility="gone"
                 android:src="@drawable/speaker" />
         </LinearLayout>
@@ -91,7 +84,8 @@
             android:id="@+id/translation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5sp"
+            android:layout_margin="2sp"
+            android:padding="2sp"
             android:text=""
             android:textSize="13sp"
             android:background="#cceecc" />
@@ -103,7 +97,7 @@
             android:layout_margin="5sp"
             android:text=""
             android:textColor="#555555"
-            android:background="#eeffee" />
+            android:background="#eeeeff" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -124,6 +118,7 @@
                 android:layout_weight="0.8"
                 android:layout_height="wrap_content"
                 android:layout_margin="2sp"
+                android:padding="2sp"
                 android:background="#ffdddd"
                 android:text="" />
 

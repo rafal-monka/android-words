@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "271615816696",
+    "firebase_url": "https://memory-248a2.firebaseio.com",
+    "project_id": "memory-248a2",
+    "storage_bucket": "memory-248a2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:271615816696:android:da240cb3e5330f46265c0d",
+        "android_client_info": {
+          "package_name": "rm.android.words"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "271615816696-vlljj4fufgovqlouklbg1vpkmnrkuinb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSdbHyUiX7N1OBgbbj_5qh6LXNy2PxuR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "271615816696-vlljj4fufgovqlouklbg1vpkmnrkuinb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

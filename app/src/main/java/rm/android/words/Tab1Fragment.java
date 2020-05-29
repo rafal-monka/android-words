@@ -33,7 +33,7 @@ public class Tab1Fragment extends Fragment {
     private static final String logtag = "Tab1Fragment";
     private static final int SPEECH_REQUEST_CODE = 0;
     //    final String API_URL = "http://192.168.253.127:8085/api/words";
-    final String API_URL = "http://nodejs-words-git-memory.apps.us-west-1.starter.openshift-online.com/api/words";
+
     Context appContext;
     private EditText words;
     private EditText sentence;
@@ -43,19 +43,17 @@ public class Tab1Fragment extends Fragment {
     private String speechPart;
     private TextView statusBar;
     private List<String> audioUrlArr = new ArrayList<String>();
-    ImageButton speakButton;
-
-    private int listenField;
+    ImageButton pronounceButton;
     private Sound sound;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SPEECH_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             String text = results.get(0);
             Log.d(logtag, "recognized text="+text);
-            switch (this.listenField) {
+            switch (requestCode) {
                 case 1:
                     words.setText(text);
                     translateRequest();
@@ -67,14 +65,22 @@ public class Tab1Fragment extends Fragment {
         }
     }
 
-
     private void displaySpeechRecognizer(int field) {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+
+        Intent voiceIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        voiceIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        voiceIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-GB");
+        voiceIntent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, true);
+        voiceIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Field ["+field+"]. Speak now...");
+        voiceIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 3000);
+        voiceIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 3000);
+        voiceIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 15000);
+        voiceIntent.putExtra("android.speech.extra.DICTATION_MODE", true);
+        voiceIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+
         //Start the activity, the intent will be populated with the speech text
         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.listenField = field;
-        startActivityForResult(intent, SPEECH_REQUEST_CODE);
+        startActivityForResult(voiceIntent, field);
     }
 
     @Override
@@ -83,23 +89,20 @@ public class Tab1Fragment extends Fragment {
 
         // Getting application context
         appContext = getActivity();
-
+        sound = new Sound();
         ImageButton listenButton1 = v.findViewById(R.id.listen1);
         ImageButton listenButton2 = v.findViewById(R.id.listen2);
         ImageButton saveButton = v.findViewById(R.id.save);
         ImageButton translateButton = v.findViewById(R.id.translate);
-        speakButton = v.findViewById(R.id.speak);
-
-        sound = new Sound();
+        pronounceButton = v.findViewById(R.id.pronounceButton);
         words = v.findViewById(R.id.words);
         sentence = v.findViewById(R.id.sentence);
         translation = v.findViewById(R.id.translation);
         hws = v.findViewById(R.id.hws);
         examples = v.findViewById(R.id.examples);
         statusBar = v.findViewById(R.id.statusBar);
-
         TextView apiurltv = v.findViewById(R.id.apiurltv);
-        apiurltv.setText(API_URL);
+        apiurltv.setText(GlobalVariables.API_URL);
 
         words.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -131,7 +134,7 @@ public class Tab1Fragment extends Fragment {
             }
         });
 
-        speakButton.setOnClickListener(new View.OnClickListener() {
+        pronounceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 playAudio();
@@ -162,10 +165,11 @@ public class Tab1Fragment extends Fragment {
             translation.setText("Searching...");
             examples.setText("");
             hws.setText("");
+            sentence.setText("");
             speechPart = "";
             audioUrlArr.clear();
-            speakButton.setVisibility(View.INVISIBLE);
-            HttpClient.get( API_URL+"/translate/?text="+text, null,
+            pronounceButton.setVisibility(View.INVISIBLE);
+            HttpClient.get( GlobalVariables.API_URL+"/translate/?text="+text, null,
                     new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers,
@@ -216,7 +220,7 @@ public class Tab1Fragment extends Fragment {
                                         if (partOfSpeechStr.indexOf(part)==-1) partOfSpeechStr += part + ", ";
                                     }
                                     if (!audioUrlArr.isEmpty()) {
-                                        speakButton.setVisibility(View.VISIBLE);
+                                        pronounceButton.setVisibility(View.VISIBLE);
                                     }
                                 }
 
@@ -238,7 +242,7 @@ public class Tab1Fragment extends Fragment {
                             translation.setText("");
                             hws.setText("");
                             speechPart = "";
-                            speakButton.setVisibility(View.INVISIBLE);
+                            pronounceButton.setVisibility(View.INVISIBLE);
                             examples.setText("");
                             Toast.makeText(
                                     appContext,
@@ -254,7 +258,7 @@ public class Tab1Fragment extends Fragment {
                             translation.setText("");
                             hws.setText("");
                             speechPart = "";
-                            speakButton.setVisibility(View.INVISIBLE);
+                            pronounceButton.setVisibility(View.INVISIBLE);
                             examples.setText("");
                             Toast.makeText(
                                     appContext,
@@ -273,7 +277,7 @@ public class Tab1Fragment extends Fragment {
     }
 
     private void saveWord() {
-        Log.d(logtag, "saveWord..."+API_URL);
+        Log.d(logtag, "saveWord..."+GlobalVariables.API_URL);
         String _phrase = words.getText().toString();
         String _hws = hws.getText().toString();
         String _speechpart = speechPart;
@@ -303,7 +307,7 @@ public class Tab1Fragment extends Fragment {
         params.put("examples", _examples);
 
         AsyncHttpClient HttpClient = new AsyncHttpClient();
-        HttpClient.post( API_URL+"/create/", params,
+        HttpClient.post( GlobalVariables.API_URL+"/create/", params,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers,

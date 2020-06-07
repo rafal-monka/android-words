@@ -102,7 +102,7 @@ public class Tab1Fragment extends Fragment {
         examples = v.findViewById(R.id.examples);
         statusBar = v.findViewById(R.id.statusBar);
         TextView apiurltv = v.findViewById(R.id.apiurltv);
-        apiurltv.setText(GlobalVariables.API_URL);
+        apiurltv.setText(GlobalVariables.API_WORDS_URL);
 
         words.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -169,7 +169,7 @@ public class Tab1Fragment extends Fragment {
             speechPart = "";
             audioUrlArr.clear();
             pronounceButton.setVisibility(View.INVISIBLE);
-            HttpClient.get( GlobalVariables.API_URL+"/translate/?text="+text, null,
+            HttpClient.get( GlobalVariables.API_WORDS_URL +"/translate/?text="+text, null,
                     new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers,
@@ -277,7 +277,7 @@ public class Tab1Fragment extends Fragment {
     }
 
     private void saveWord() {
-        Log.d(logtag, "saveWord..."+GlobalVariables.API_URL);
+        Log.d(logtag, "saveWord..."+GlobalVariables.API_WORDS_URL);
         String _phrase = words.getText().toString();
         String _hws = hws.getText().toString();
         String _speechpart = speechPart;
@@ -305,9 +305,10 @@ public class Tab1Fragment extends Fragment {
         params.put("sentence", sentence.getText().toString());
         params.put("translation", _translation);
         params.put("examples", _examples);
+        params.put("tags", "A"); //###default A?
 
         AsyncHttpClient HttpClient = new AsyncHttpClient();
-        HttpClient.post( GlobalVariables.API_URL+"/create/", params,
+        HttpClient.post( GlobalVariables.API_WORDS_URL +"/create/", params,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers,
@@ -319,7 +320,7 @@ public class Tab1Fragment extends Fragment {
                             statusBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(
                                     appContext,
-                                    "Saved #"+response.get("id"), //response.toString(2),
+                                    "Saved #"+response.get("_id"), //response.toString(2),
                                     Toast.LENGTH_SHORT
                             ).show();
                         } catch (Exception e) {

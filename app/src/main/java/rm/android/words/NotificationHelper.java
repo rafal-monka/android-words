@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.os.Build;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -26,7 +27,7 @@ public class NotificationHelper {
     public static String GROUP_KEY = "GROUP_KEY";
 
 
-    public static void createNotification(Context ctx, String title, String text, String id, String color) {
+    public static void createNotification(Context ctx, String title, String text, String _id, String color) {
         Log.d("NotificationHelper", "onMessageReceived createNotification");
         int notificationId = new Random().nextInt();
 
@@ -35,7 +36,7 @@ public class NotificationHelper {
 
         Intent positive = new Intent(ctx, NotificationReceiver.class);
         positive.putExtra("notiID", notificationId);
-        positive.putExtra("id", id);
+        positive.putExtra("_id", _id);
         positive.setAction(NotificationHelper.POSITIVE_CLICK);
 
         PendingIntent pIntent_positive = PendingIntent.getBroadcast( ctx, notificationId, positive, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -49,7 +50,7 @@ public class NotificationHelper {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(ctx, "notify_001")
             .setContentTitle(title)
             .setContentText(text)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
             .setStyle(new NotificationCompat.BigTextStyle())
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setColor(Color.parseColor(color))

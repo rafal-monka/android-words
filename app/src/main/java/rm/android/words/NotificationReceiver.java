@@ -15,11 +15,11 @@ public class NotificationReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         int noti_id=intent.getIntExtra("notiID",0);
-        String id=intent.getStringExtra("id");
+        String _id=intent.getStringExtra("_id");
 
         if(action.equals(NotificationHelper.POSITIVE_CLICK)) {
-            Log.d(logtag,"Pressed + ID="+id);
-            HTTPRequests.MarkAsRemembered(id);
+            Log.d(logtag,"Pressed + ID="+_id);
+            HTTPRequests.MarkAsRemembered(_id);
             cancel(context, noti_id);
         } else if(action.equals(NotificationHelper.NEGATIVE_CLICK)) {
             Log.d(logtag,"Pressed -");

@@ -43,25 +43,28 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    private void sendRegistrationToServer(String deviceId, String deviceToken) {
+    private void sendRegistrationToServer(String deviceId, String deviceToken, String deviceName) {
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
             protected String doInBackground(String... params) {
                 String deviceId = params[0];
                 String deviceToken = params[1];
+                String deviceName = params[2];
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost httpPost = new HttpPost(
                         GlobalVariables.API_TOKENS_URL+"/create");// replace with your url
                 httpPost.addHeader("Content-type", "application/x-www-form-urlencoded");
                 BasicNameValuePair device = new BasicNameValuePair(
-                        "device", deviceId);  // Make your own key value pair
+                        "device", deviceId);
                 BasicNameValuePair token = new BasicNameValuePair(
-                        "token", deviceToken);// make your own key value pair
+                        "token", deviceToken);
+                BasicNameValuePair name = new BasicNameValuePair(
+                        "name", deviceName);
 
                 List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
                 nameValuePairList.add(device);
                 nameValuePairList.add(token);
-
+                nameValuePairList.add(name);
                 try {
                     UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(
                             nameValuePairList);
@@ -100,7 +103,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         //Send POST request
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
-        sendPostReqAsyncTask.execute(deviceId, deviceToken);
+        sendPostReqAsyncTask.execute(deviceId, deviceToken, deviceName);
     }
 
     @Override
@@ -112,7 +115,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d("sendRegistrationToServer.onNewToken", "deviceId=" + deviceId);
 
         //register device with  token
-        sendRegistrationToServer(deviceId, token);
+        sendRegistrationToServer(deviceId, token, Build.MANUFACTURER+"/"+Build.MODEL);
     }
 
     @Override
@@ -120,13 +123,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
         String color = remoteMessage.getData().get("color");
-        String id = remoteMessage.getData().get("id");
-        Log.d(TAG, "title " + remoteMessage.getFrom() + title);
+        String _id = remoteMessage.getData().get("_id");
+        Log.d(TAG, "title: " + remoteMessage.getFrom() + title);
         Log.d(TAG, "body: " + remoteMessage.getFrom() + body);
-        Log.d(TAG, "id: " + remoteMessage.getFrom() + id);
+        Log.d(TAG, "_id: " + remoteMessage.getFrom() + _id);
         super.onMessageReceived(remoteMessage);
 
-        NotificationHelper.createNotification(getApplicationContext(), title, body, id, color);
+        NotificationHelper.createNotification(getApplicationContext(), title, body, _id, color);
 
     }
 }

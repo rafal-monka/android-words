@@ -320,7 +320,7 @@ public class Tab1Fragment extends Fragment {
                             statusBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(
                                     appContext,
-                                    "Saved #"+response.get("_id"), //response.toString(2),
+                                    "Saved #"+response.toString(2),//.get("_id"), //response.toString(2),
                                     Toast.LENGTH_SHORT
                             ).show();
                         } catch (Exception e) {

@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new Tab1Fragment(), "Phrase");
         adapter.addFragment(new Tab2Fragment(), "Dict");
         adapter.addFragment(new Tab3Fragment(), "Browse");
-        adapter.addFragment(new Tab4Fragment(), "*BuyList");
+        adapter.addFragment(new Tab4Fragment(), "*ShopList");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
